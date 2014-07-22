@@ -1,17 +1,29 @@
 package com.android.iviewer;
 
-import com.android.pirate.iviewer.R;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.hardware.Camera.Size;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.android.iviewer.utils.Constants;
+import com.android.iviewer.utils.Utility;
+import com.android.pirate.iviewer.R;
 
 public class AccelometerMain extends Activity implements SensorEventListener {
 	private float mLastX, mLastY, mLastZ;
@@ -19,6 +31,13 @@ public class AccelometerMain extends Activity implements SensorEventListener {
 	private SensorManager mSensorManager;
 	private Sensor mAccelerometer;
 	private final float NOISE = (float) 2.0;
+    String[] projection = {MediaStore.Images.Thumbnails._ID};
+	private Uri uri;
+	private int mPosition=0;
+	private Bitmap bitmap;
+	private Bitmap newBitmap;
+	private int mSize;
+
 
 
 	/** Called when the activity is first created. */
@@ -33,6 +52,35 @@ public class AccelometerMain extends Activity implements SensorEventListener {
 				.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		mSensorManager.registerListener(this, mAccelerometer,
 				SensorManager.SENSOR_DELAY_NORMAL);
+		init();
+	}
+
+	private void init() {
+		// TODO Auto-generated method stub
+		Constants.IMAGE_PATH.clear();
+		@SuppressWarnings("deprecation")
+		Cursor cursor = managedQuery( MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                projection, // Which columns to return
+                null,       // Return all rows
+                null,       
+                null); 
+        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
+         mSize = cursor.getCount();
+        // If size is 0, there are no images on the SD Card.
+        if (mSize == 0) {
+            //No Images available, post some message to the user
+        }
+        int imageID = 0;
+        Log.d("SD","Size = "+ mSize);
+        for (int i = 0; i < mSize; i++) {
+            cursor.moveToPosition(i);
+            imageID = cursor.getInt(columnIndex);
+            uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + imageID);
+            Constants.IMAGE_PATH.add(uri);
+            Log.d("SD", "IMAGE_PATH Size " + Constants.IMAGE_PATH.size());
+            
+        }
+        cursor.close();
 	}
 
 	@Override
@@ -76,11 +124,55 @@ public class AccelometerMain extends Activity implements SensorEventListener {
 			tvZ.setText(Float.toString(deltaZ));
 			iv.setVisibility(View.VISIBLE);
 			if (deltaX > deltaY) {
-				iv.setImageResource(R.drawable.horizontal);
+				if(mLastX > 0){
+					 try {
+						bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(Constants.IMAGE_PATH.get(mPosition)));
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	                    if (bitmap != null) {
+	                    	   newBitmap = Bitmap.createScaledBitmap(bitmap, Utility.getScreenWidth(AccelometerMain.this) - 100,Utility.getScreenHeight(AccelometerMain.this) -200 , true);
+	                        bitmap.recycle();
+	                        if (newBitmap != null) {
+	                            //publishProgress(new LoadedImage(newBitmap));
+	                        	iv.setImageBitmap(newBitmap);
+	                        }
+					
+				}
+	                    mPosition++;
+	                    if(mPosition >= mSize)
+	                    	mPosition=0;
+				}
+				else {
+					 try {
+						bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(Constants.IMAGE_PATH.get(mPosition)));
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	                    if (bitmap != null) {
+//	                        newBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), true);
+	                    	   newBitmap = Bitmap.createScaledBitmap(bitmap, Utility.getScreenWidth(AccelometerMain.this) -100, Utility.getScreenHeight(AccelometerMain.this) -200, true);
+
+	                        bitmap.recycle();
+	                        if (newBitmap != null) {
+	                            //publishProgress(new LoadedImage(newBitmap));
+	                        	iv.setImageBitmap(newBitmap);
+	                        }
+					
+				}
+	                    mPosition--;
+	                    if(mPosition < 0)
+	                    	mPosition=0;
+					 
+				}
+					
+				//iv.setImageResource(R.drawable.horizontal);
 			} else if (deltaY > deltaX) {
-				iv.setImageResource(R.drawable.vertical);
+				//iv.setImageResource(R.drawable.vertical);
 			} else {
-				iv.setVisibility(View.INVISIBLE);
+				//iv.setVisibility(View.INVISIBLE);
 			}
 		}
 	}
