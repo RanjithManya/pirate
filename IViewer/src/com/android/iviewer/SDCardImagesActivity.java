@@ -30,6 +30,7 @@ import android.widget.ImageView;
 
 import com.android.iviewer.utils.Constants;
 import com.android.pirate.iviewer.R;
+import com.squareup.picasso.Picasso;
 
 /**
  * Displays images from an SD card.
@@ -182,6 +183,7 @@ public class SDCardImagesActivity extends Activity implements OnItemClickListene
 	                //No Images available, post some message to the user
 	            }
 	            int imageID = 0;
+	            Constants.IMAGE_PATH.clear();
 	            Log.d("SD","Size = "+ size);
 	            for (int i = 0; i < size; i++) {
 	                cursor.moveToPosition(i);
@@ -265,6 +267,8 @@ public class SDCardImagesActivity extends Activity implements OnItemClickListene
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             imageView.setPadding(8, 8, 8, 8);
             imageView.setImageBitmap(photos.get(position).getBitmap());
+			//Picasso.with(SDCardImagesActivity.this).load(Constants.IMAGE_PATH.get(position)).into(imageView);
+
             return imageView; 
         } 
     }

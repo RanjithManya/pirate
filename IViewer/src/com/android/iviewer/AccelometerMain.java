@@ -20,10 +20,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.iviewer.utils.Constants;
 import com.android.iviewer.utils.Utility;
 import com.android.pirate.iviewer.R;
+import com.squareup.picasso.Picasso;
 
 public class AccelometerMain extends Activity implements SensorEventListener {
 	private float mLastX, mLastY, mLastZ;
@@ -48,15 +50,12 @@ public class AccelometerMain extends Activity implements SensorEventListener {
 		setContentView(R.layout.activity_accelometer_main);
 		mInitialized = false;
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-		mAccelerometer = mSensorManager
-				.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		mSensorManager.registerListener(this, mAccelerometer,
-				SensorManager.SENSOR_DELAY_NORMAL);
+		mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 		init();
 	}
 
 	private void init() {
-		// TODO Auto-generated method stub
 		Constants.IMAGE_PATH.clear();
 		@SuppressWarnings("deprecation")
 		Cursor cursor = managedQuery( MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -77,10 +76,11 @@ public class AccelometerMain extends Activity implements SensorEventListener {
             imageID = cursor.getInt(columnIndex);
             uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + imageID);
             Constants.IMAGE_PATH.add(uri);
-            Log.d("SD", "IMAGE_PATH Size " + Constants.IMAGE_PATH.size());
+           
             
         }
-        cursor.close();
+        cursor.close(); 
+        Log.d("SD", "IMAGE_PATH Size " + Constants.IMAGE_PATH.size());
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class AccelometerMain extends Activity implements SensorEventListener {
 			mLastY = y;
 			mLastZ = z;
 			tvX.setText("0.0");
-			tvY.setText("0.0");
+			tvY.setText("0.0");	
 			tvZ.setText("0.0");
 			mInitialized = true;
 		} else {
@@ -124,44 +124,32 @@ public class AccelometerMain extends Activity implements SensorEventListener {
 			tvZ.setText(Float.toString(deltaZ));
 			iv.setVisibility(View.VISIBLE);
 			if (deltaX > deltaY) {
+				Picasso.with(AccelometerMain.this).load(Constants.IMAGE_PATH.get(mPosition)).into(iv);
 				if(mLastX > 0){
 					 try {
-						bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(Constants.IMAGE_PATH.get(mPosition)));
-					} catch (FileNotFoundException e) {
+						 Toast.makeText(AccelometerMain.this, " >>>>>>>>> ", Toast.LENGTH_SHORT).show();	
+						//bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(Constants.IMAGE_PATH.get(mPosition)));
+						Picasso.with(AccelometerMain.this).load(Constants.IMAGE_PATH.get(mPosition)).into(iv);
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-	                    if (bitmap != null) {
-	                    	   newBitmap = Bitmap.createScaledBitmap(bitmap, Utility.getScreenWidth(AccelometerMain.this) - 100,Utility.getScreenHeight(AccelometerMain.this) -200 , true);
-	                        bitmap.recycle();
-	                        if (newBitmap != null) {
-	                            //publishProgress(new LoadedImage(newBitmap));
-	                        	iv.setImageBitmap(newBitmap);
-	                        }
-					
-				}
+	                     
 	                    mPosition++;
 	                    if(mPosition >= mSize)
 	                    	mPosition=0;
 				}
 				else {
 					 try {
-						bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(Constants.IMAGE_PATH.get(mPosition)));
-					} catch (FileNotFoundException e) {
+						 Toast.makeText(AccelometerMain.this, " <<<<<<<< ", Toast.LENGTH_SHORT).show();
+						//bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(Constants.IMAGE_PATH.get(mPosition)));
+						Picasso.with(AccelometerMain.this).load(Constants.IMAGE_PATH.get(mPosition)).into(iv);
+
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-	                    if (bitmap != null) {
-//	                        newBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), true);
-	                    	   newBitmap = Bitmap.createScaledBitmap(bitmap, Utility.getScreenWidth(AccelometerMain.this) -100, Utility.getScreenHeight(AccelometerMain.this) -200, true);
-
-	                        bitmap.recycle();
-	                        if (newBitmap != null) {
-	                            //publishProgress(new LoadedImage(newBitmap));
-	                        	iv.setImageBitmap(newBitmap);
-	                        }
-					
-				}
+	                     
 	                    mPosition--;
 	                    if(mPosition < 0)
 	                    	mPosition=0;
