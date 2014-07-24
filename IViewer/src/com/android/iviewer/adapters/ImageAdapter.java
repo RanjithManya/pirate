@@ -5,7 +5,12 @@ import java.util.ArrayList;
 
 
 
+
+
+import com.android.iviewer.AccelometerMain;
+import com.android.iviewer.utils.Constants;
 import com.android.pirate.iviewer.R;
+import com.squareup.picasso.Picasso;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
@@ -29,7 +34,7 @@ public class ImageAdapter extends PagerAdapter {
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return 4;
+		return Constants.IMAGE_PATH.size();
 	}
 
 	@Override
@@ -44,11 +49,12 @@ public class ImageAdapter extends PagerAdapter {
 		LayoutInflater inflater = (LayoutInflater) mContext
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    View layout = inflater.inflate(R.layout.viewpageitem_xml, null);
-		ImageView im = (ImageView) layout.findViewById(R.id.image1);
+		ImageView imageView = (ImageView) layout.findViewById(R.id.image1);
 		//TextView textView = (TextView) layout.findViewById(R.id.description);
-		Log.d("TAG","imArray[position] = " +imArray[position]);
-		im.setImageResource(imArray[position]);
-		Log.d("TAG","position = " +position);
+		//Log.d("TAG","imArray[position] = " +imArray[position]);
+		//im.setImageResource(imArray[position]);
+		Picasso.with(mContext).load(Constants.IMAGE_PATH.get(position)).into(imageView);
+//		Log.d("TAG","position = " +position);
 		//textView.setText(position.t);
 		((ViewPager) container).addView(layout);
 		return layout;
