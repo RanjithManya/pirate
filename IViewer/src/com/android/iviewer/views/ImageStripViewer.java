@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +34,30 @@ public class ImageStripViewer {
 		mContainer = (PagerContainer) mRelativeLayout.findViewById(R.id.pager_container);
 
 		LoopingViewPager pager = mContainer.getViewPager();
+		
+		pager.setOnPageChangeListener(new OnPageChangeListener() {
+			
+			@Override
+			public void onPageSelected(int arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+				
+				
+			}
+			
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		PagerAdapter adapter = new MyPagerAdapter();
 		pager.setAdapter(adapter);
+		pager.setCurrentItem(2);
 		//Necessary or the pager will only have one extra page to show
 		// make this at least however many pages you can see
 		//pager.setOffscreenPageLimit(adapter.getCount());
