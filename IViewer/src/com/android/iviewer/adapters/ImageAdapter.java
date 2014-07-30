@@ -24,7 +24,6 @@ import android.widget.TextView;
 public class ImageAdapter extends PagerAdapter {
 
 	private Context mContext;
-	private int[] imArray = {R.drawable.thumbnail_1,R.drawable.thumbnail_2,R.drawable.thumbnail_3,R.drawable.thumbnail_4,R.drawable.thumbnail_5,R.drawable.thumbnail_6,R.drawable.thumbnail_7,R.drawable.thumbnail_8};
 
 	public ImageAdapter(Context context) {
 
@@ -34,7 +33,8 @@ public class ImageAdapter extends PagerAdapter {
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return Constants.IMAGE_PATH.size();
+		Log.d("SD", "Size " +Constants.IMAGE_PATH1.size());
+		return Constants.IMAGE_PATH1.size();
 	}
 
 	@Override
@@ -53,7 +53,9 @@ public class ImageAdapter extends PagerAdapter {
 		//TextView textView = (TextView) layout.findViewById(R.id.description);
 		//Log.d("TAG","imArray[position] = " +imArray[position]);
 		//im.setImageResource(imArray[position]);
-		Picasso.with(mContext).load(Constants.IMAGE_PATH.get(position)).into(imageView);
+		Log.d("SD","uri " +Constants.IMAGE_PATH1.get(position));
+//		Picasso.with(mContext).load(Constants.IMAGE_PATH1.get(position)).into(imageView);
+		imageView.setImageURI(Constants.IMAGE_PATH1.get(position));
 //		Log.d("TAG","position = " +position);
 		//textView.setText(position.t);
 		((ViewPager) container).addView(layout);

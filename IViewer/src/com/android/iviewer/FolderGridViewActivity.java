@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.android.iviewer.utils.Utility;
 import com.android.pirate.iviewer.R;
 
-public class GridViewActivity extends Activity {
+public class FolderGridViewActivity extends Activity {
 
 	final String[] projection = {
 
@@ -40,10 +40,6 @@ public class GridViewActivity extends Activity {
 	private int mSize;
 	private String bucket;
 	private String id;
-
-
-
-
 	static ArrayList<String> mFoldernames = new ArrayList<String>();
 	static ArrayList<String> mAbsolutePaths = new ArrayList<String>();
 
@@ -55,11 +51,10 @@ public class GridViewActivity extends Activity {
 		init();
 		GridView gridview = (GridView) findViewById(R.id.gridview1);
 		gridview.setAdapter(new ImageAdapter(this));
-
 		gridview.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				Toast.makeText(GridViewActivity.this, " " + mAbsolutePaths.get(position), Toast.LENGTH_SHORT).show();
+				Toast.makeText(FolderGridViewActivity.this, " " + mAbsolutePaths.get(position), Toast.LENGTH_SHORT).show();
 				startActivity(mAbsolutePaths.get(position));
 			}
 		});
@@ -67,18 +62,14 @@ public class GridViewActivity extends Activity {
 
 
 	protected void startActivity(String inPath) {
-		// TODO Auto-generated method stub
-		Intent intent =  new Intent(this,ImagesGridActivity.class);
+		Intent intent =  new Intent(this, ImagesGridActivity.class);
 		intent.putExtra("path", inPath);
 		startActivity(intent);
 	}
 
 
 	private void init() {
-
-		// TODO Auto-generated method stub
 		mFoldernames.clear();
-
 		cursor = this.getContentResolver().query(
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
 				projection,
@@ -103,11 +94,8 @@ public class GridViewActivity extends Activity {
 				mAbsolutePaths.add(Utility.extractDirectoryPath(string));
 				mFoldernames.add(bucket);
 				id = cursor.getString(idColumn);
-
 			} while (cursor.moveToNext());
 		}
-
-
 	}
 
 
@@ -122,18 +110,19 @@ public class GridViewActivity extends Activity {
 		if (file.isDirectory())
 		{
 			listFile = file.listFiles();
-
-
 			for (int i = 0; i < listFile.length; i++)
 			{
-
 				f.add(listFile[i].getAbsolutePath());
-
 			}
 		}
 	}
-
 }	
+
+/**
+ * 
+ * @author Ranjith Yadav
+ *
+ */
 class ImageAdapter extends BaseAdapter {
 	private Context mContext;
 
@@ -142,8 +131,8 @@ class ImageAdapter extends BaseAdapter {
 	}
 
 	public int getCount() {
-		if( GridViewActivity.mFoldernames != null)
-			return GridViewActivity.mFoldernames.size();
+		if( FolderGridViewActivity.mFoldernames != null)
+			return FolderGridViewActivity.mFoldernames.size();
 		else 
 			return 0;
 	}
@@ -168,7 +157,7 @@ class ImageAdapter extends BaseAdapter {
 			textView = (TextView) convertView;
 		}
 
-		textView.setText( GridViewActivity.mFoldernames.get(position));
+		textView.setText( FolderGridViewActivity.mFoldernames.get(position));
 		return textView;*/
 
 		View row = convertView;
@@ -187,10 +176,8 @@ class ImageAdapter extends BaseAdapter {
 		}
 
 		// Item item = data.get(position);
-		holder.txtTitle.setText(GridViewActivity.mFoldernames.get(position));
-
-
-		String str =ImagesGridActivity.mFileDirPath +"/"+ GridViewActivity.mFoldernames.get(position);
+		holder.txtTitle.setText(FolderGridViewActivity.mFoldernames.get(position));
+		String str =ImagesGridActivity.mFileDirPath +"/"+ FolderGridViewActivity.mFoldernames.get(position);
 		Log.d("TAG", " " + str);
 		Uri uri = Uri.parse(str);
 		// imageView.setImageURI(uri);

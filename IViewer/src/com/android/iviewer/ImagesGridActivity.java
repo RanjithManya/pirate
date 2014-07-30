@@ -8,12 +8,15 @@ import java.util.ArrayList;
 
 import junit.framework.Test;
 
+import com.android.iviewer.utils.Constants;
 import com.android.pirate.iviewer.R;
 import com.squareup.picasso.Picasso;
 
+import android.R.integer;
 import android.app.Activity;
 import android.content.ClipData.Item;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,14 +43,12 @@ public class ImagesGridActivity  extends Activity{
 		setContentView(R.layout.layout_grid);
 		  Bundle extras = getIntent().getExtras();
 		  mFileDirPath = extras.getString("path");
-		  
-
 		init();
-		
 	}
 
 	private void init() {
 		// TODO Auto-generated method stub
+		Constants.IMAGE_PATH1.clear();
 		displayDirectoryContents();
 	}
 	
@@ -78,6 +79,24 @@ public class ImagesGridActivity  extends Activity{
 		inflateGridview();
 	}
 
+	protected void startActivity(int inPosition) {
+		// TODO Auto-generated method stub
+		String str;
+		Constants.IMAGE_PATH1.clear();
+		for(int i=0; i<test.size(); i++){
+			
+			str =ImagesGridActivity.mFileDirPath +"/"+ ImagesGridActivity.test.get(i);
+			Log.d("TAG", "testt testse  " + str);
+			Uri uri = Uri.parse(str);
+			 Constants.IMAGE_PATH1.add(uri);
+		}
+		
+		Intent intent =  new Intent(this,ImageViewerMainActivity.class);
+		intent.putExtra("position", inPosition);
+		startActivity(intent);
+	}
+	
+	
 	private void inflateGridview() {
 		GridView gridview = (GridView) findViewById(R.id.gridview1);
 		gridview.setAdapter(new ImageAdapter1(this));
@@ -86,7 +105,7 @@ public class ImagesGridActivity  extends Activity{
 
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				Toast.makeText(ImagesGridActivity.this, " " + position, Toast.LENGTH_SHORT).show();
-
+				  startActivity(position);
 			}
 		});
 		
@@ -99,6 +118,8 @@ class ImageAdapter1 extends BaseAdapter {
 
 	public ImageAdapter1(Context c) {
 		mContext = c;
+ 
+
 	}
 
 	public int getCount() {
@@ -140,6 +161,9 @@ class ImageAdapter1 extends BaseAdapter {
          String str =ImagesGridActivity.mFileDirPath +"/"+ ImagesGridActivity.test.get(position);
          Log.d("TAG", " " + str);
          Uri uri = Uri.parse(str);
+      //   if(!Constants.IMAGE_PATH1.contains(uri))
+		
+
         // imageView.setImageURI(uri);
          holder.imageItem.setImageURI(uri);
 		  return row;

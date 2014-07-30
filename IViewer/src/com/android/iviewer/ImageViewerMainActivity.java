@@ -28,10 +28,15 @@ public class ImageViewerMainActivity extends Activity implements SensorEventList
 	private ViewerPage mViewPager;
 	private SensorManager mSensorManager;
 	private Sensor mAccelerometer;
+	private int mPosition;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		init();
+		  Bundle extras = getIntent().getExtras();
+		  mPosition = extras.getInt("position");
+		  Log.d("TAG", "position" + mPosition ); 
+		  
+	//	init();
 		mViewPager = new ViewerPage();
 		mInitialized = false;
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -41,7 +46,7 @@ public class ImageViewerMainActivity extends Activity implements SensorEventList
 	}
 
 	private void init() {
-		Constants.IMAGE_PATH.clear();
+		//Constants.IMAGE_PATH.clear();
 		@SuppressWarnings("deprecation")
 		Cursor cursor = managedQuery( MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
 				mProjection, // Which columns to return
@@ -60,9 +65,9 @@ public class ImageViewerMainActivity extends Activity implements SensorEventList
 			cursor.moveToPosition(i);
 			imageID = cursor.getInt(columnIndex);
 			mUri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + imageID);
-			Constants.IMAGE_PATH.add(mUri);
+			//Constants.IMAGE_PATH.add(mUri);
 		}
-		Log.d("SD", "IMAGE_PATH Size " + Constants.IMAGE_PATH.size());
+		//Log.d("SD", "IMAGE_PATH Size " + Constants.IMAGE_PATH.size());
 		cursor.close();
 	}
 
