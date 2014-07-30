@@ -50,7 +50,7 @@ public class GridViewActivity extends Activity {
 		setContentView(R.layout.layout_grid);
 
 		init();
-		GridView gridview = (GridView) findViewById(R.id.gridview);
+		GridView gridview = (GridView) findViewById(R.id.gridview1);
 		gridview.setAdapter(new ImageAdapter(this));
 
 		gridview.setOnItemClickListener(new OnItemClickListener() {
