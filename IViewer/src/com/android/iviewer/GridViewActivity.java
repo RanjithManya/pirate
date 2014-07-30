@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,14 +20,16 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.iviewer.utils.Utility;
 import com.android.pirate.iviewer.R;
 
 public class GridViewActivity extends Activity {
 
 	final String[] projection = {
-			
+
 			MediaStore.Images.Media.BUCKET_ID,
-			MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+			MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+			MediaStore.Images.Media.DATA
 	};
 
 	String BUCKET_GROUP_BY = "1) GROUP BY 1,(2";
@@ -36,13 +39,11 @@ public class GridViewActivity extends Activity {
 	private String bucket;
 	private String id;
 
-	private int mIndex;
 
-	private Uri mUri1;
 
 
 	static ArrayList<String> mFoldernames = new ArrayList<String>();
-	static ArrayList<Integer> mFolderIds = new ArrayList<Integer>();
+	static ArrayList<String> mAbsolutePaths = new ArrayList<String>();
 
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,20 +55,23 @@ public class GridViewActivity extends Activity {
 		gridview.setAdapter(new ImageAdapter(this));
 
 		gridview.setOnItemClickListener(new OnItemClickListener() {
-			private Uri mUri;
 
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				Toast.makeText(GridViewActivity.this, "" + position, Toast.LENGTH_SHORT).show();
-				
-				
-				// mUri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" +GridViewActivity.mFoldernames.get(position));
-//				 init1(GridViewActivity.mFoldernames.get(position));
-				
+				Toast.makeText(GridViewActivity.this, " " + mAbsolutePaths.get(position), Toast.LENGTH_SHORT).show();
+				startActivity(mAbsolutePaths.get(position));
 			}
 		});
 	}
-	
-	
+
+
+	protected void startActivity(String inPath) {
+		// TODO Auto-generated method stub
+		Intent intent =  new Intent(this,ImagesGridActivity.class);
+		intent.putExtra("path", inPath);
+		startActivity(intent);
+	}
+
+
 	private void init() {
 
 		// TODO Auto-generated method stub
@@ -89,41 +93,42 @@ public class GridViewActivity extends Activity {
 
 			int idColumn = cursor.getColumnIndex(
 					MediaStore.Images.Media.BUCKET_ID);
-			//int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
-
+			int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 			do {
 				// Get the field values
 				bucket = cursor.getString(bucketColumn);
-				//mIndex = cursor.getInt(index);
-				//mFolderIds.add(mIndex);
+				String string = cursor.getString(column_index);
+				mAbsolutePaths.add(Utility.extractDirectoryPath(string));
 				mFoldernames.add(bucket);
 				id = cursor.getString(idColumn);
-				Log.d("TAG", "DATA : " +bucket );
 
 			} while (cursor.moveToNext());
 		}
 
 
 	}
-	
+
+
+
+
 	public void getFromSdcard()
 	{
 		File[] listFile;
 		ArrayList<String> f = new ArrayList<String>();// list of file paths
-	    File file= new File(android.os.Environment.getExternalStorageDirectory(),"MapleBear");
+		File file= new File(android.os.Environment.getExternalStorageDirectory(),"MapleBear");
 
-	        if (file.isDirectory())
-	        {
-	            listFile = file.listFiles();
+		if (file.isDirectory())
+		{
+			listFile = file.listFiles();
 
 
-	            for (int i = 0; i < listFile.length; i++)
-	            {
+			for (int i = 0; i < listFile.length; i++)
+			{
 
-	                f.add(listFile[i].getAbsolutePath());
+				f.add(listFile[i].getAbsolutePath());
 
-	            }
-	        }
+			}
+		}
 	}
 
 }	
