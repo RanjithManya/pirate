@@ -76,7 +76,7 @@ public class ImagesGridActivity  extends Activity{
 	}
 
 	private void inflateGridview() {
-		GridView gridview = (GridView) findViewById(R.id.gridview);
+		GridView gridview = (GridView) findViewById(R.id.gridview1);
 		gridview.setAdapter(new ImageAdapter1(this));
 
 		gridview.setOnItemClickListener(new OnItemClickListener() {
