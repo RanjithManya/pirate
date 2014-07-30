@@ -11,12 +11,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -156,7 +158,7 @@ class ImageAdapter extends BaseAdapter {
 
 	// create a new ImageView for each item referenced by the Adapter
 	public View getView(int position, View convertView, ViewGroup parent) {
-		TextView textView;
+		/*TextView textView;
 		if (convertView == null) {  // if it's not recycled, initialize some attributes
 			textView = new TextView(mContext);
 			textView.setLayoutParams(new GridView.LayoutParams(85, 85));
@@ -167,7 +169,39 @@ class ImageAdapter extends BaseAdapter {
 		}
 
 		textView.setText( GridViewActivity.mFoldernames.get(position));
-		return textView;
+		return textView;*/
+
+		View row = convertView;
+		RecordHolder holder = null;
+
+		if (row == null) {
+			LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+			row = inflater.inflate(R.layout.layout_gridview_item, parent, false);
+
+			holder = new RecordHolder();
+			holder.txtTitle = (TextView) row.findViewById(R.id.item_text);
+			holder.imageItem = (ImageView) row.findViewById(R.id.item_image);
+			row.setTag(holder);
+		} else {
+			holder = (RecordHolder) row.getTag();
+		}
+
+		// Item item = data.get(position);
+		holder.txtTitle.setText(GridViewActivity.mFoldernames.get(position));
+
+
+		String str =ImagesGridActivity.mFileDirPath +"/"+ GridViewActivity.mFoldernames.get(position);
+		Log.d("TAG", " " + str);
+		Uri uri = Uri.parse(str);
+		// imageView.setImageURI(uri);
+		holder.imageItem.setImageResource(R.drawable.folder);
+		return row;
+	}
+
+	static class RecordHolder {
+		TextView txtTitle;
+		ImageView imageItem;
+
 	}
 
 

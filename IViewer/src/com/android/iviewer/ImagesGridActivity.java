@@ -12,10 +12,12 @@ import com.android.pirate.iviewer.R;
 import com.squareup.picasso.Picasso;
 
 import android.app.Activity;
+import android.content.ClipData.Item;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -65,9 +67,10 @@ public class ImagesGridActivity  extends Activity{
 		
 			for (int i=0; i < file.length; i++)
 			{
-				if(file[i].isDirectory())
+				if(file[i].isDirectory() || !(file[i].getName().contains(".jpg") ||(file[i].getName().contains(".png"))))
 					continue;
 				Log.d("TAG", "FileName: " + file[i].getName());
+				
 				test.add(file[i].getName());
 			}
 
@@ -115,35 +118,40 @@ class ImageAdapter1 extends BaseAdapter {
 
 	// create a new ImageView for each item referenced by the Adapter
 	public View getView(int position, View convertView, ViewGroup parent) {
-	/*	TextView textView;
-		if (convertView == null) {  // if it's not recycled, initialize some attributes
-			textView = new TextView(mContext);
-			textView.setLayoutParams(new GridView.LayoutParams(85, 85));
-			// imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-			textView.setPadding(8, 8, 8, 8);
-		} else {
-			textView = (TextView) convertView;
-		}
+		View row = convertView;
+		  RecordHolder holder = null;
 
-		textView.setText(ImagesGridActivity.test.get(position));
-		return textView;*/
-		 final ImageView imageView; 
-         if (convertView == null) { 
-             imageView = new ImageView(mContext); 
-         } else { 
-             imageView = (ImageView) convertView; 
-         } 
-         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-         imageView.setPadding(8, 8, 8, 8);
-        // imageView.setImageBitmap(photos.get(position).getBitmap());
+		  if (row == null) {
+		   LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+		   row = inflater.inflate(R.layout.layout_gridview_item, parent, false);
+
+		   holder = new RecordHolder();
+		   holder.txtTitle = (TextView) row.findViewById(R.id.item_text);
+		   holder.imageItem = (ImageView) row.findViewById(R.id.item_image);
+		   row.setTag(holder);
+		  } else {
+		   holder = (RecordHolder) row.getTag();
+		  }
+
+		 // Item item = data.get(position);
+		  holder.txtTitle.setText(ImagesGridActivity.test.get(position));
+		  
+
          String str =ImagesGridActivity.mFileDirPath +"/"+ ImagesGridActivity.test.get(position);
          Log.d("TAG", " " + str);
          Uri uri = Uri.parse(str);
-         imageView.setImageURI(uri);
+        // imageView.setImageURI(uri);
+         holder.imageItem.setImageURI(uri);
+		  return row;
 			//Picasso.with(ImagesGridActivity.this).load(uri).into(imageView);
 
 //			Picasso.with(ImagesGridActivity.this).load(ImagesGridActivity.mFileDirPath.into(imageView);
-         return imageView; 
+         //return view; 
 	}
+	static class RecordHolder {
+		  TextView txtTitle;
+		  ImageView imageItem;
+
+		 }
 
 }
