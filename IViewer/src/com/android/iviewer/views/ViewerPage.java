@@ -33,7 +33,8 @@ public class ViewerPage {
 	}
 	
 	
-	public void changeItem(int mode){
+	
+	public void changeItem(int mode,int inPosition){
 		int currentPosition = mVPager.getCurrentItem();
 		Log.d("TAG", "change item \n" + "position " +currentPosition);
 		switch (mode) {
@@ -46,7 +47,10 @@ public class ViewerPage {
 			mVPager.setCurrentItem(currentPosition -1);
 			mVPager.invalidate();
 			break;
-			
+		case 3:
+			mVPager.setCurrentItem(inPosition );
+			mVPager.invalidate();
+			break;
 			default:
 				mVPager.invalidate();
 		}
