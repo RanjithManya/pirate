@@ -45,32 +45,30 @@ public class ImagesGridActivity  extends Activity {
 	private final BaseSpringSystem mSpringSystem = SpringSystem.create();
 	private final ExampleSpringListener mSpringListener = new ExampleSpringListener();
 	private Spring mScaleSpring;
-	  private View mImageView;
+	private View mImageView;
 
 
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.layout_grid);
-	    mScaleSpring = mSpringSystem.createSpring();
-
+		setContentView(R.layout.layout_grid2);
 		Bundle extras = getIntent().getExtras();
 		mFileDirPath = extras.getString("path");
 		init();
 	}
 
-	 @Override
-	  public void onResume() {
-	    super.onResume();
-	    mScaleSpring.addListener(mSpringListener);
-	  }
+	@Override
+	public void onResume() {
+		super.onResume();
+		mScaleSpring.addListener(mSpringListener);
+	}
 
-	  @Override
-	  public void onPause() {
-	    super.onPause();
-	    mScaleSpring.removeListener(mSpringListener);
-	  }
-	
+	@Override
+	public void onPause() {
+		super.onPause();
+		mScaleSpring.removeListener(mSpringListener);
+	}
+
 	private void init() {
 		// TODO Auto-generated method stub
 		Constants.IMAGE_PATH1.clear();
@@ -123,7 +121,7 @@ public class ImagesGridActivity  extends Activity {
 
 
 	private void inflateGridview() {
-		GridView gridview = (GridView) findViewById(R.id.gridview1);
+		GridView gridview = (GridView) findViewById(R.id.gridview2);
 		gridview.setAdapter(new ImageAdapter1(this));
 
 		gridview.setOnItemClickListener(new OnItemClickListener() {
@@ -131,23 +129,23 @@ public class ImagesGridActivity  extends Activity {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				Toast.makeText(ImagesGridActivity.this, " " + position, Toast.LENGTH_SHORT).show();
 				mImageView = v;
-	            mScaleSpring.setEndValue(1);
+				mScaleSpring.setEndValue(1);
 
 				startActivity(position);
-				
+
 			}
 		});
 
 	}
-	
+
 	private class ExampleSpringListener extends SimpleSpringListener {
-	    @Override
-	    public void onSpringUpdate(Spring spring) {
-	      float mappedValue = (float) SpringUtil.mapValueFromRangeToRange(spring.getCurrentValue(), 0, 1, 1, 0.5);
-	      mImageView.setScaleX(mappedValue);
-	      mImageView.setScaleY(mappedValue);
-	    }
-	  }
+		@Override
+		public void onSpringUpdate(Spring spring) {
+			float mappedValue = (float) SpringUtil.mapValueFromRangeToRange(spring.getCurrentValue(), 0, 1, 1, 0.5);
+			mImageView.setScaleX(mappedValue);
+			mImageView.setScaleY(mappedValue);
+		}
+	}
 
 }
 
