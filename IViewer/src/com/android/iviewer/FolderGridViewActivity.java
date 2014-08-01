@@ -46,7 +46,7 @@ public class FolderGridViewActivity extends Activity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.layout_grid);
+		setContentView(R.layout.layout_grid1);
 
 		init();
 		GridView gridview = (GridView) findViewById(R.id.gridview1);

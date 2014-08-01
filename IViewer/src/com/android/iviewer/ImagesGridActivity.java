@@ -40,7 +40,7 @@ public class ImagesGridActivity  extends Activity{
 	public static ArrayList<String> test = new ArrayList<String>();
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.layout_grid);
+		setContentView(R.layout.layout_grid2);
 		  Bundle extras = getIntent().getExtras();
 		  mFileDirPath = extras.getString("path");
 		init();
@@ -98,7 +98,7 @@ public class ImagesGridActivity  extends Activity{
 	
 	
 	private void inflateGridview() {
-		GridView gridview = (GridView) findViewById(R.id.gridview1);
+		GridView gridview = (GridView) findViewById(R.id.gridview2);
 		gridview.setAdapter(new ImageAdapter1(this));
 
 		gridview.setOnItemClickListener(new OnItemClickListener() {
