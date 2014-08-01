@@ -60,13 +60,13 @@ public class ImagesGridActivity  extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		mScaleSpring.addListener(mSpringListener);
+		//mScaleSpring.addListener(mSpringListener);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		mScaleSpring.removeListener(mSpringListener);
+		//mScaleSpring.removeListener(mSpringListener);
 	}
 
 	private void init() {
@@ -129,7 +129,7 @@ public class ImagesGridActivity  extends Activity {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				Toast.makeText(ImagesGridActivity.this, " " + position, Toast.LENGTH_SHORT).show();
 				mImageView = v;
-				mScaleSpring.setEndValue(1);
+				//mScaleSpring.setEndValue(1);
 
 				startActivity(position);
 
