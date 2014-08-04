@@ -107,6 +107,7 @@ public class ImagesGridActivity  extends Activity {
 	}
 
 
+	
 	/**
 	 * display the contents of "mdestination path"
 	 * @param view 
