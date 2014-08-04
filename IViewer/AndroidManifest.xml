@@ -28,8 +28,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.android.iviewer.ImagesGridActivity" />
-        <activity android:name="com.android.iviewer.ImageViewerMainActivity" />
+        <activity
+            android:name="com.android.iviewer.ImagesGridActivity"
+            android:parentActivityName=".FolderGridViewActivity" />
+        <activity
+            android:name="com.android.iviewer.ImageViewerMainActivity"
+            android:parentActivityName=".ImagesGridActivity" />
     </application>
 
 </manifest>

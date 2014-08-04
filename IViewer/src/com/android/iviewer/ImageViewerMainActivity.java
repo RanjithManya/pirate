@@ -1,5 +1,6 @@
 package com.android.iviewer;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.Surface;
 import android.widget.Toast;
 
@@ -40,7 +42,7 @@ public class ImageViewerMainActivity extends Activity implements SensorEventList
 		Bundle extras = getIntent().getExtras();
 		mPosition = extras.getInt("position");
 		Log.d("TAG", "position" + mPosition ); 
-
+		setActionBar();
 		//	init();
 		mViewPager = new ViewerPage();
 		mInitialized = false;
@@ -52,6 +54,28 @@ public class ImageViewerMainActivity extends Activity implements SensorEventList
 			mViewPager.changeItem(3,mPosition);
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+//			closeActivity();
+			finish();
+			break;
+		}
+		return true;
+	}
+	
+	/**
+	 * This method is used to inflate the Action bar with custom views, set
+	 * Action Bar icon, Action Bar text
+	 */
+	private void setActionBar() {
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setDisplayShowHomeEnabled(true);
+
+	}
 	private void init() {
 		//Constants.IMAGE_PATH.clear();
 		@SuppressWarnings("deprecation")

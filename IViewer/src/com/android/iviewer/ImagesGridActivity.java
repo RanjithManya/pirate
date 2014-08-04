@@ -6,6 +6,7 @@ package com.android.iviewer;
 import java.io.File;
 import java.util.ArrayList;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -30,6 +32,7 @@ import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringSystem;
 import com.facebook.rebound.SpringUtil;
+import com.squareup.picasso.Picasso;
 
 /**
  * @author Kingsley Gomes
@@ -46,14 +49,18 @@ public class ImagesGridActivity  extends Activity {
 	private final ExampleSpringListener mSpringListener = new ExampleSpringListener();
 	private Spring mScaleSpring;
 	private View mImageView;
+	private String mParentDirName;
 
 
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_grid2);
+		
 		Bundle extras = getIntent().getExtras();
 		mFileDirPath = extras.getString("path");
+		mParentDirName = extras.getString("parentDirName");
+		setActionBar();
 		init();
 	}
 
@@ -68,7 +75,31 @@ public class ImagesGridActivity  extends Activity {
 		super.onPause();
 		//mScaleSpring.removeListener(mSpringListener);
 	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+//			closeActivity();
+			finish();
+			break;
+		}
+		return true;
+	}
 
+	/**
+	 * This method is used to inflate the Action bar with custom views, set
+	 * Action Bar icon, Action Bar text
+	 */
+	private void setActionBar() {
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		//actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setDisplayShowHomeEnabled(true);
+		
+		if(mParentDirName != null)
+			actionBar.setTitle(mParentDirName);
+
+	}
 	private void init() {
 		// TODO Auto-generated method stub
 		Constants.IMAGE_PATH1.clear();
@@ -199,12 +230,10 @@ class ImageAdapter1 extends BaseAdapter {
 
 
 		// imageView.setImageURI(uri);
-		holder.imageItem.setImageURI(uri);
+		//holder.imageItem.setImageURI(uri);
+		 Picasso.with(mContext).load(uri).into(holder.imageItem);
 		return row;
-		//Picasso.with(ImagesGridActivity.this).load(uri).into(imageView);
 
-		//			Picasso.with(ImagesGridActivity.this).load(ImagesGridActivity.mFileDirPath.into(imageView);
-		//return view; 
 	}
 	static class RecordHolder {
 		TextView txtTitle;

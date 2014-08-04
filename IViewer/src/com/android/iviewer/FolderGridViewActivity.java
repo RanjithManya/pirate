@@ -55,15 +55,17 @@ public class FolderGridViewActivity extends Activity {
 
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				Toast.makeText(FolderGridViewActivity.this, " " + mAbsolutePaths.get(position), Toast.LENGTH_SHORT).show();
-				startActivity(mAbsolutePaths.get(position));
+				
+				startActivity(mAbsolutePaths.get(position), mFoldernames.get(position));
 			}
 		});
 	}
 
 
-	protected void startActivity(String inPath) {
+	protected void startActivity(String inPath, String inParentDirName) {
 		Intent intent =  new Intent(this, ImagesGridActivity.class);
 		intent.putExtra("path", inPath);
+		intent.putExtra("parentDirName", inParentDirName);
 		startActivity(intent);
 	}
 
